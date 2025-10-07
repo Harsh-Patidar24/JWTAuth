@@ -5,7 +5,7 @@ import authRoutes from "./routes/authRoute"
 import connectDB from "./config/db"
 import cors from "cors";
 import dotenv from "dotenv"
-import protectedRoutes from "./routes/authRoute"
+import protectedRoutes from "./routes/protected"
 import { authenticationToken } from "./middleware/authMiddleware"
 
 dotenv.config();

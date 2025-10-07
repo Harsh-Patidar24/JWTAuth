@@ -15,7 +15,12 @@ function dashboard() {
         return;
       }
       try {
-        const response = await api.post("/api/protected");
+        const response = await api.get("/api/protected", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (!response.data.ok) {
           localStorage.removeItem("token");
           navigate("/");
@@ -25,6 +30,8 @@ function dashboard() {
         setLoading(false);
       } catch (error) {
         console.error(error);
+        localStorage.removeItem("token");
+
         navigate("/");
       }
     };

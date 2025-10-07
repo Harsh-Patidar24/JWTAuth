@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./component/home";
-import Dashboard from "./component/dashboard";
+import Dashboard from "./component/dashboard-axios";
 import ProtectedRoute from "./component/ProtectedRoute";
 
 // Route objects

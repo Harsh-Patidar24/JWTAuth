@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LoginForm from "./login";
-import RegisterForm from "./register";
+import LoginForm from "./login-axios";
+import RegisterForm from "./register-axios";
 
 const Home = () => {
   const [showLogin, setShowLogin] = useState(true); // toggle state
