@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoute"
 import connectDB from "./config/db"
 import cors from "cors";
 import dotenv from "dotenv"
+import protectedRoutes from "./routes/authRoute"
 import { authenticationToken } from "./middleware/authMiddleware"
 
 dotenv.config();
@@ -18,11 +19,11 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
-
-app.get("/api/protected", authenticationToken, (req, res) => {
-  const user = (req as any).user;
-  res.send(`Welcome ${user.userName}, you accessed a protected route!`);
-});
+app.use("/api/protected", protectedRoutes);
+// app.get("/api/protected", authenticationToken, (req, res) => {
+//   const user = (req as any).user;
+//   res.send(`Welcome ${user.userName}, you accessed a protected route!`);
+// });
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 

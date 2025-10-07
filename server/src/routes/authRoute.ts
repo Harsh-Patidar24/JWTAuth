@@ -1,9 +1,22 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/userSchema";
-import { generateToken } from "../utils/JWT";
+import { generateToken, verifyToken } from "../utils/JWT";
 
 const router = express.Router();
+
+router.get("/", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: "No token provided" });
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = verifyToken(token);
+    res.json({ user: decoded });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+})
 
 
 router.post("/register", async (req, res) => {

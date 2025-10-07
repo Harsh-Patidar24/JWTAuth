@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 function dashboard() {
   const [loading, setLoading] = useState(true);
@@ -14,20 +15,13 @@ function dashboard() {
         return;
       }
       try {
-        const response = await fetch("http://localhost:3500/api/protected", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if(!response.ok){
+        const response = await api.post("/api/protected");
+        if (!response.data.ok) {
           localStorage.removeItem("token");
           navigate("/");
           return;
         }
-
-        const data = await response.json();
-        setUser(data.user);
+        setUser(response.data.user);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -35,8 +29,8 @@ function dashboard() {
       }
     };
     verifyToken();
-  },[]);
-  if(loading) return <div>loading......</div>
+  }, []);
+  if (loading) return <div>loading......</div>;
 
   return <div>dashboard</div>;
 }
