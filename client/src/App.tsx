@@ -1,16 +1,34 @@
-import React from 'react'
-import RegisterForm from './component/register'
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Home from "./component/home";
+import Dashboard from "./component/dashboard";
+import ProtectedRoute from "./component/ProtectedRoute";
 
-function App() {
+// Route objects
+const routeConfig = [
+  { path: "/", element: <Home /> },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+];
+
+const App = () => {
   return (
-    <div>
-      <RegisterForm />
-    </div>
-  )
-}
+    <Routes>
+      {routeConfig.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+};
 
-export default App
-
+export default App;
 
 
 

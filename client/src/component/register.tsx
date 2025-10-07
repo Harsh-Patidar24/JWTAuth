@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:3500/api/auth";
 
@@ -9,21 +10,36 @@ const RegisterForm = () => {
   const [role, setRole] = useState("user");
   const [message, setMessage] = useState("");
 
-  const handleRegister = async () => {
+  const navigate = useNavigate();
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault(); // prevent form reload
+
     if (!userName || !email || !password) {
-      setMessage("form fields are required");
+      setMessage("All fields are required.");
       return;
     }
+
     try {
       const res = await fetch(`${API_URL}/register`, {
         method: "POST",
         headers: {
-          "content-type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ userName, email, role, password }),
       });
+
       const data = await res.json();
-      setMessage(data.message || JSON.stringify(data));
+      console.log("response", data);
+
+      // ✅ Save token if backend returns it (you can modify backend to send one)
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        // setMessage("Registration successful! Token saved.");
+      } else {
+        setMessage(data.message || "User registered successfully.");
+      }
+      navigate("/login");
     } catch (err) {
       console.error(err);
       setMessage("Registration failed. Try again.");
@@ -31,43 +47,47 @@ const RegisterForm = () => {
   };
 
   return (
-    <form>
-      <h2>Login</h2>
+    <form onSubmit={handleRegister} style={{ padding: "20px" }}>
+      <h2>Register</h2>
+
       <div>
-        <label htmlFor="username">Username:</label>
+        <label>Username:</label>
         <input
           type="text"
-          id="username"
+          value={userName}
           onChange={(e) => setUserName(e.target.value)}
         />
       </div>
+
       <div>
-        <label htmlFor="password">Password:</label>
+        <label>Email:</label>
         <input
-          type="password"
-          id="password"
+          type="email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
+
       <div>
-        <label htmlFor="password">Role:</label>
+        <label>Password:</label>
         <input
-          type="text"
-          id="password"
-          onChange={(e) => setRole(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Email:</label>
-        <input
-          type="email"
-          id="password"
+          type="password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button type="submit" onClick={handleRegister}>
-        Register
-      </button>
+
+      <div>
+        <label>Role:</label>
+        <input
+          type="text"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        />
+      </div>
+
+      <button type="submit">Register</button>
+      <p>{message}</p>
     </form>
   );
 };

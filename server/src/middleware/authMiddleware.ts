@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.JWT_SECRET || "your-secret-key";
+const SECRET_KEY = process.env.JWT_SECRET || "yyour-token-is-nothing";
 
 export const authenticationToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
