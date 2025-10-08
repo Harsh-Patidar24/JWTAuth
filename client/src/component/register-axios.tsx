@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { userAuth } from "../Custom-Hook/custom";
+
 
 // const API_URL = "http://localhost:3500/api/auth";
 
 const RegisterForm = () => {
+  const{Register} = userAuth()
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,36 +17,39 @@ const RegisterForm = () => {
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault(); // prevent form reload
+    e.preventDefault(); 
+    Register(userName,email,role,password)
 
-    if (!userName || !email || !password) {
-      setMessage("All fields are required.");
-      return;
-    }
 
-    try {
-      const response = await api.post(`/api/auth/register`, {
-        userName,
-        email,
-        role,
-        password,
-      });
 
-      // const data = await response.json();
-      // console.log("response", data);
+    // if (!userName || !email || !password) {
+    //   setMessage("All fields are required.");
+    //   return;
+    // }
 
-      // ✅ Save token if backend returns it (you can modify backend to send one)
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        // setMessage("Registration successful! Token saved.");
-      } else {
-        setMessage(response.data.message || "User registered successfully.");
-      }
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-      setMessage("Registration failed. Try again.");
-    }
+    // try {
+    //   const response = await api.post(`/api/auth/register`, {
+    //     userName,
+    //     email,
+    //     role,
+    //     password,
+    //   });
+
+    //   // const data = await response.json();
+    //   // console.log("response", data);
+
+    //   // ✅ Save token if backend returns it (you can modify backend to send one)
+    //   if (response.data.token) {
+    //     localStorage.setItem("token", response.data.token);
+    //     // setMessage("Registration successful! Token saved.");
+    //   } else {
+    //     setMessage(response.data.message || "User registered successfully.");
+    //   }
+    //   navigate("/login");
+    // } catch (err) {
+    //   console.error(err);
+    //   setMessage("Registration failed. Try again.");
+    // }
   };
 
   return (
